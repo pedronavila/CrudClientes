@@ -17,4 +17,5 @@ Route::get('/', function () {
 
 // Route::get('/clientes', 'ClientesController@Index');
 // Route::get('/clientes/create','ClientesController@Create');
+
 Route::resource('clientes', 'ClientesController');

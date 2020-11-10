@@ -36,14 +36,14 @@
     <tbody>
         @foreach($clientes as $cliente)
                 <tr>
-                <td>{{$loop->iteration + $clientes->firstItem() - 1}}</td>
-                <td>{{$cliente->RFC}}</td>
-                <td>{{$cliente->nombre}}</td>
-                <td>{{$cliente->edad}}</td>
-                <td>{{$cliente->idciudad}}</td>
+                <td>{{$loop->index + 1 }}</td>
+                <td>{{$cliente->getRFC()}}</td>
+                <td>{{$cliente->getNombre()}}</td>
+                <td>{{$cliente->getEdad()}}</td>
+                <td>{{$cliente->getIdCiudad()}}</td>
                 <td >
-                    <a class="btn btn-warning" href="{{'clientes/'.$cliente->RFC.'/edit'}}">Editar</a>
-                    <form action="{{ url('/clientes/'.$cliente->RFC) }}" style="display:inline" method="post">
+                    <a class="btn btn-warning" href="{{'clientes/'.$cliente->getRFC().'/edit'}}">Editar</a>
+                    <form action="{{ url('/clientes/'.$cliente->getRFC()) }}" style="display:inline" method="post">
                         {{csrf_field()}}
                         {{method_field('DELETE')}}
                         <button class="btn btn-danger" type="submit" onclick="return confirm('¿Desea borrarlo?')";>Borrar</button>
@@ -55,7 +55,7 @@
     </tbody>
     
 </table>
-{!! $clientes->render() !!}
+
 
 </div>
 @endsection

@@ -1,27 +1,25 @@
-<!--Diferenciar quien pide este formulario-->
- 
 <div class="form-group">
     <label for="RFC" class="control-label">{{'RFC'}}</label>
     <input type="text" class="form-control" name="RFC" id="RFC" 
-    value="{{isset($cliente->RFC) ? $cliente->RFC : ''}}">
+    value="{{isset($cliente) ? $cliente->getRFC() : ''}}">
 </div>
 
 <div class="form-group">
     <label for="Nombre" class="control-label">{{'Nombre'}}</label>
     <input type="text" class="form-control" name="Nombre" id="Nombre"
-    value="{{isset($cliente->nombre) ? $cliente->nombre: ''}}">
+    value="{{isset($cliente) ? $cliente->getNombre(): ''}}">
 </div>
     
 <div class="form-group">
     <label for="Edad" class="control-label">{{'Edad'}}</label>
     <input type="text" class="form-control" name="Edad" id="Edad"
-    value="{{isset($cliente->edad) ? $cliente->edad : ''}}">
+    value="{{isset($cliente) ? $cliente->getEdad() : ''}}">
 </div>
     
 <div class="form-group">
     <label for="idCiudad" class="control-label">{{'idCiudad'}}</label>
     <input type="text" class="form-control" name="idCiudad" id="idCiudad"
-    value="{{isset($cliente->idciudad) ? $cliente->idciudad : ''}}">
+    value="{{isset($cliente) ? $cliente->getIdCiudad() : ''}}">
 </div>
     
 

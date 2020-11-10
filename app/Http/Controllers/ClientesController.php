@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\CrudModel;
 use App\Cliente;
 use Exception;
 use Illuminate\Http\Request;
@@ -9,7 +10,13 @@ use Illuminate\Support\Facades\Redirect;
 use stdClass;
 
 class ClientesController extends Controller
-{
+{   
+    private $crudModel;
+
+    function __construct()
+    {
+        $this->crudModel = new CrudModel();
+    }
     /**
      * Display a listing of the resource.
      *
@@ -17,7 +24,7 @@ class ClientesController extends Controller
      */
     public function index()
     {
-        $datos['clientes'] = Cliente::paginate(5);
+        $datos['clientes'] = $this->crudModel->consultarClientes();
         return view('clientes.index', $datos);
     }
 
@@ -28,7 +35,6 @@ class ClientesController extends Controller
      */
     public function create()
     {
-
         return view('clientes.create');
     }
 
@@ -42,14 +48,10 @@ class ClientesController extends Controller
     {
         $result = new stdClass();
 
-        $cliente = new Cliente();
-        $cliente->RFC = $request->RFC;
-        $cliente->nombre = $request->Nombre;
-        $cliente->edad = $request->Edad;
-        $cliente->idciudad = $request->idCiudad;
-        
+        $cliente = new Cliente($request->RFC, $request->Nombre, $request->Edad,$request->idCiudad);
+
         try{
-            if( $cliente->save()){
+            if( $this->crudModel->guardarCliente($cliente) == 1){
                 $result->tipo = "alertSuccess";
                 $result->mensaje = "Cliente registrado existosamente";
             }else{
@@ -83,7 +85,8 @@ class ClientesController extends Controller
      */
     public function edit($RFC)
     {
-        $cliente = Cliente::findOrFail($RFC);
+        $cliente = $this->crudModel->consultarCliente($RFC);
+
         return view('clientes.edit',compact('cliente'));
     }
 
@@ -99,14 +102,9 @@ class ClientesController extends Controller
         $result = new stdClass();
 
         try{
-            $cliente = Cliente::findOrFail($RFC);
-
-            $cliente->RFC = $request->RFC;
-            $cliente->nombre = $request->Nombre;
-            $cliente->edad = $request->Edad;
-            $cliente->idciudad = $request->idCiudad;
+            $cliente = new Cliente($request->RFC, $request->Nombre, $request->Edad,$request->idCiudad);
         
-            if( $cliente->save()){
+            if( $this->crudModel->modificarCliente($cliente, $RFC)){
                 $result->tipo = "alertSuccess";
                 $result->mensaje = "Cliente modificado existosamente";
             }else{
@@ -114,6 +112,8 @@ class ClientesController extends Controller
                 $result->mensaje = "Ocurrió un error al modificar cliente";
             }
         }catch(Exception $e){
+            var_dump($e);
+            die();
             $result->tipo = "alertError";
             $result->mensaje = "Ocurrió un error al modificar cliente";
         }
@@ -130,8 +130,9 @@ class ClientesController extends Controller
     public function destroy($RFC)
     {
         $result = new stdClass();
+
         try{
-            if( Cliente::destroy($RFC)){
+            if( $this->crudModel->eliminarCliente($RFC) == 1){
                 $result->tipo = "alertSuccess";
                 $result->mensaje = "Cliente eliminado existosamente";
             }else{
