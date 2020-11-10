@@ -14,7 +14,6 @@ class ClientesDao
     public function consultarClientes(){
         $clientes = [];
         $results = DB::select('SELECT * FROM clientes');
-
         foreach ($results as $registro) {
             $clientes[] = new Cliente($registro->RFC, $registro->nombre, $registro->edad,$registro->idciudad);
         }
@@ -49,5 +48,7 @@ class ClientesDao
       
         return $cliente;
     }
+
+    
    
 }

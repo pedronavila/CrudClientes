@@ -36,7 +36,7 @@
     <tbody>
         @foreach($clientes as $cliente)
                 <tr>
-                <td>{{$loop->index + 1 }}</td>
+                <td>{{$loop->iteration + $clientes->firstItem() - 1}}</td>
                 <td>{{$cliente->getRFC()}}</td>
                 <td>{{$cliente->getNombre()}}</td>
                 <td>{{$cliente->getEdad()}}</td>
@@ -55,7 +55,6 @@
     </tbody>
     
 </table>
-
-
+{{$clientes->links()}}
 </div>
 @endsection

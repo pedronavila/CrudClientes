@@ -7,6 +7,7 @@ use App\Cliente;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Pagination\LengthAwarePaginator;
 use stdClass;
 
 class ClientesController extends Controller
@@ -22,10 +23,24 @@ class ClientesController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $datos['clientes'] = $this->crudModel->consultarClientes();
-        return view('clientes.index', $datos);
+        $datos = $this->crudModel->consultarClientes();
+
+        $paginator['clientes'] = $this->getPaginador($request, $datos, 5);
+        
+        return view('clientes.index', $paginator);
+    }
+   
+    private function getPaginador(Request $request, $clientes, $paginas)
+    {
+        $total = count($clientes);
+        $paginaActual = $request->page ?? 1; // Obtiene el número de página
+        $offset = ($paginaActual - 1) * $paginas; // Cuantos items seran skipeados
+        $items = array_slice($clientes, $offset, $paginas);//Se corta el array solo con los datos a mostrar
+
+        return new LengthAwarePaginator($items, $total, $paginas, $paginaActual, [
+            'path' => $request->url()]);
     }
 
     /**
